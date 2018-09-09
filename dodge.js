@@ -3,8 +3,10 @@ $(document).ready(function() {
     ctx = canvas.getContext("2d");
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
-
+  var music = document.getElementById("music");
   var count = 0;
+  var score=0;
+  var highscore=0;
     var Player = function() {
       this.randomx = width/2;
       this.randomy = height/2;
@@ -13,17 +15,21 @@ $(document).ready(function() {
       this.dy = 0;
 
       this.checkWallCol = function() {
-        if(this.randomx + this.radius >= width) {
-          this.randomx -= 10;
+        if(this.randomx + 15 >= width) {
+          alert("Why you be hitting the wall???");
+          reset();
         }
-        if(this.randomx + this.radius <= 0) {
-          this.randomx += 10;
+        if(this.randomx - 12 <= 0) {
+          alert("Why you be hitting the wall???");
+          reset();
         }
-        if(this.randomy + this.radius >= height) {
-          this.randomy -= 10;
+        if(this.randomy -12 >= height) {
+          alert("Why you be hitting the wall???");
+          reset();
         }
-        if(this.randomy + this.radius <= 0) {
-          this.randomy += 10;
+        if(this.randomy + 15 <= 0) {
+          alert("Why you be hitting the wall???");
+          reset();
         }
       }
       this.red = function() {
@@ -90,15 +96,30 @@ $(document).ready(function() {
       };
 }
     var myPlayer = new Player();
-
-
+    var playing = true;
+    function play_audio(task) {
+      if(task == 'play'){
+           $(music).trigger('play');
+           playing = true;
+      }
+      if(task == 'stop'){
+           $(music).trigger('pause');
+           playing = false;
+      }
+ }
     document.addEventListener("keydown", keyDownHandler);
-    var statement1 = true;
-    var statement = statement1;
+
+
     function keyDownHandler(event) {
       var mag = 5;
-
-
+      /*if(event.keyCode == 77) {
+        console.log("hello");
+        if(playing) {
+          play_audio("stop")
+        } else if(!playing){
+          play_audio("play");
+        }
+      }*/
       //w and s
       if(event.keyCode == 38){
         myPlayer.setVelocityY(-mag);
@@ -203,7 +224,7 @@ $(document).ready(function() {
     };
 
 
-
+    play_audio("play");
     var circles = [];
     function drawEnemy() {
     for(var i = 0; i < 11; i ++) {
@@ -221,12 +242,16 @@ $(document).ready(function() {
   } else{
     count = 0;
   }
+    score += 1000;
+    if(score > highscore){
+      highscore=score;
+    }
     var newWave = new Circle(1,1,30,)
     circles.push(newWave);
   }
   var borderColor = "white";
   function setBorder() {
-    console.log("working");
+
     if(count == 0) {
       borderColor = "rgba(255,255,255,0)";
     } else if (count == 1) {
@@ -254,6 +279,7 @@ $(document).ready(function() {
     circles = [];
     drawEnemy();
     count = 0;
+    score = 0;
 
   }
 
@@ -285,11 +311,14 @@ $(document).ready(function() {
       ctx.fillStyle = green();
     }
     ctx.fillRect(0,0,width,height);
+    ctx.fillStyle = "white";
+    ctx.font = "20px Georgia";
+    ctx.fillText("Your Score: "+ score,20,20);
+    ctx.fillText("High Score: "+ highscore,250,20);
 
     for(var i = 0; i < circles.length; i++) {
       if(distance(myPlayer, circles[i]) < myPlayer.radius + circles[i].radius) {
-        alert("Game Over");
-        statement = false;
+        alert("Game Over!")
         reset();
 
 
