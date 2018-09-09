@@ -96,7 +96,7 @@ $(document).ready(function() {
       };
 }
     var myPlayer = new Player();
-    var playing = true;
+    var playing = false;
     function play_audio(task) {
       if(task == 'play'){
            $(music).trigger('play');
@@ -123,14 +123,26 @@ $(document).ready(function() {
       //w and s
       if(event.keyCode == 38){
         myPlayer.setVelocityY(-mag);
+        if(!playing) {
+          play_audio("play");
+        }
       } else if(event.keyCode == 40){
         myPlayer.setVelocityY(mag);
+        if(!playing) {
+          play_audio("play");
+        }
       }
       //a and d
       if(event.keyCode == 37){
         myPlayer.setVelocityX(-mag);
+        if(!playing) {
+          play_audio("play");
+        }
       } else if(event.keyCode == 39){
         myPlayer.setVelocityX(mag);
+        if(!playing) {
+          play_audio("play");
+        }
       }
     }
     document.addEventListener("keyup", keyUpHandler);
@@ -224,7 +236,7 @@ $(document).ready(function() {
     };
 
 
-    play_audio("play");
+
     var circles = [];
     function drawEnemy() {
     for(var i = 0; i < 11; i ++) {
